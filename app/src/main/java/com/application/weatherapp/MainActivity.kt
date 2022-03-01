@@ -16,48 +16,44 @@ import com.application.weatherapp.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
 
-    val CITY: String = "Tokyo, JP"
+    val CITY: String="Kyoto, JP"
+//            Array<String> = arrayOf("Tokyo,JP", "California, US", "London, UK")
     val spinnerItems = arrayOf("Tokyo,JP", "California, US", "London, UK")
     val API: String = "06c921750b9a82d8f5d1294e1586276f"
 
     private lateinit var binding: ActivityMainBinding
 
+    private var citySelected = "Tokyo, JP"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-//        val spinner = findViewById<Spinner>(R.id.spinner)
-//        val adapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, spinnerItems)
-//        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-//        spinner.adapter = adapter
 
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
         val adapter = ArrayAdapter(applicationContext,
             android.R.layout.simple_spinner_item, spinnerItems)
-
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-
-        // spinner に adapter をセット
-        // View Binding
         binding.spinner.adapter = adapter
 
-        // リスナーを登録
-        binding.spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener{
-            //　アイテムが選択された時
-            override fun onItemSelected(parent: AdapterView<*>?,
-                                        view: View?, position: Int, id: Long) {
-                val spinnerParent = parent as Spinner
-                val item = spinnerParent.selectedItem as String
-                // View Binding
-                binding.textView.text = item
-            }
+        binding.spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
 
-            //　アイテムが選択されなかった
+
+            override fun onItemSelected(
+                parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                val spinnerParent = parent as Spinner
+
+                // ここ変える
+                val item = spinnerParent.selectedItem as String
+
+                binding.textView.text = item
+
+                citySelected = parent?.getItemAtPosition(position).toString()
+
+            }
             override fun onNothingSelected(parent: AdapterView<*>?) {
-                //
             }
         }
 
