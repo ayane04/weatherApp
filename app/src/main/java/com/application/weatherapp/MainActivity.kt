@@ -17,11 +17,11 @@ import com.application.weatherapp.databinding.ActivityMainBinding
 class MainActivity : AppCompatActivity() {
 
     val CITY: String = "Tokyo, JP"
+    val spinnerItems = arrayOf("Tokyo,JP", "California, US", "London, UK")
     val API: String = "06c921750b9a82d8f5d1294e1586276f"
 
     private lateinit var binding: ActivityMainBinding
-//    private val spinnerItems = arrayOf("Select city", "Tokyo", "California", "London")
-    private val spinnerItems = arrayOf("Select city", "Tokyo", "California", "London")
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
