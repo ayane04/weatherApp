@@ -20,8 +20,8 @@ class MainActivity : AppCompatActivity() {
     val API: String = "06c921750b9a82d8f5d1294e1586276f"
 
     private lateinit var binding: ActivityMainBinding
+//    private val spinnerItems = arrayOf("Select city", "Tokyo", "California", "London")
     private val spinnerItems = arrayOf("Select city", "Tokyo", "California", "London")
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -35,7 +35,6 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        // ArrayAdapter
         val adapter = ArrayAdapter(applicationContext,
             android.R.layout.simple_spinner_item, spinnerItems)
 
@@ -113,7 +112,7 @@ class MainActivity : AppCompatActivity() {
                 val address = jsonObj.getString("name")+", "+sys.getString("country")
 
                 /* Populating extracted data into our views */
-                findViewById<TextView>(R.id.address).text = address
+                findViewById<TextView>(R.id.textView).text = address
                 findViewById<TextView>(R.id.updated_at).text =  updatedAtText
                 findViewById<TextView>(R.id.status).text = weatherDescription.capitalize()
                 findViewById<TextView>(R.id.temp).text = temp
