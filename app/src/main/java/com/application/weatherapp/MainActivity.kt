@@ -1,5 +1,7 @@
 package com.application.weatherapp
 
+import android.content.Context
+import android.content.SharedPreferences
 import android.os.AsyncTask
 import android.os.Bundle
 import android.view.View
@@ -16,12 +18,15 @@ import com.application.weatherapp.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
 
-    val CITY: String="Kyoto, JP"
+    val CITY: String="Tokyo, JP"
 //            Array<String> = arrayOf("Tokyo,JP", "California, US", "London, UK")
-    val spinnerItems = arrayOf("Tokyo,JP", "California, US", "London, UK")
     val API: String = "06c921750b9a82d8f5d1294e1586276f"
 
+//    private lateinit var latestUpdateTitleTextView: TextView
+//    private lateinit var latestUpdateTextView: TextView
     private lateinit var binding: ActivityMainBinding
+
+//    private var codeSelected = "Tokyo, JP"
 
     private var citySelected = "Tokyo, JP"
 
@@ -29,12 +34,12 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        val adapter = ArrayAdapter(applicationContext,
-            android.R.layout.simple_spinner_item, spinnerItems)
+//        val sharedPreferences = getSharedPreferences("weather app", Context.MODE_PRIVATE)
+
+        val adapter : ArrayAdapter<*> = ArrayAdapter.createFromResource(this, R.array.cities, R.layout.simple_spinner_item)
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         binding.spinner.adapter = adapter
 
@@ -45,12 +50,15 @@ class MainActivity : AppCompatActivity() {
                 parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
                 val spinnerParent = parent as Spinner
 
-                // ここ変える
+                // ここ？
                 val item = spinnerParent.selectedItem as String
-
-                binding.textView.text = item
-
                 citySelected = parent?.getItemAtPosition(position).toString()
+                    //???
+//                    States().getStatesMap()[parent?.getItemAtPosition(position)].toString()
+
+//                updateDataAndVisualizations(sharedPreferences, false)
+
+//                binding.textView.text = item
 
             }
             override fun onNothingSelected(parent: AdapterView<*>?) {
@@ -119,6 +127,8 @@ class MainActivity : AppCompatActivity() {
                 findViewById<TextView>(R.id.wind).text = windSpeed
                 findViewById<TextView>(R.id.pressure).text = pressure
                 findViewById<TextView>(R.id.humidity).text = humidity
+//                latestUpdateTitleTextView = findViewById(R.id.tv_latest_update_title)
+//                latestUpdateTextView = findViewById(R.id.tv_latest_update)
 
                 /* Views populated, Hiding the loader, Showing the main design */
                 findViewById<ProgressBar>(R.id.loader).visibility = View.GONE
@@ -128,7 +138,42 @@ class MainActivity : AppCompatActivity() {
                 findViewById<ProgressBar>(R.id.loader).visibility = View.GONE
                 findViewById<TextView>(R.id.errorText).visibility = View.VISIBLE
             }
-
         }
+
     }
-}
+//    private fun updateDataAndVisualizations(sharedPreferences: SharedPreferences, calledFromCardView: Boolean) {
+//        setCardText(sharedPreferences)
+//    }
+
+//    private fun setCardText(sharedPreferences: SharedPreferences) {
+//        // Set Cards subtitle text
+//        val latestUpdateTileText = "$codeSelected"
+//        latestUpdateTitleTextView.text = latestUpdateTileText
+//
+//        // Format selected state from "New York" to "NEWYORK" or "All States" to "US"
+//        val CITY = if (citySelected == "All States") "US" else citySelected.uppercase(Locale.ROOT)
+//            .replace(" ", "")
+//
+//        // Set last updated text
+//        latestUpdateTextView.text = sharedPreferences.getString("${CITY}_UPDATED", "Unknown")
+
+        // Set total numbers
+//        .text = sharedPreferences.getString("${CITY}_INFECTED", "Unknown")
+
+        // Get new numbers
+//        val newInfected = sharedPreferences.getString("${CITY}_NEW_INFECTED", "0")
+//        val newVaccinated = sharedPreferences.getString("${state}_NEW_VACCINATED", "0")
+//        val newDeaths = sharedPreferences.getString("${state}_NEW_DEATHS", "0")
+
+        // Format new numbers
+//        val formattedNewInfected = if (newInfected!!.replace(",", "").toInt() <= 0) "No Changes" else "+ $newInfected"
+//        val formattedNewVaccinated = if (newVaccinated!!.replace(",", "").toInt() <= 0) "No Changes" else "+ $newVaccinated"
+//        val formattedNewDeaths = if (newDeaths!!.replace(",", "").toInt() <= 0) "No Changes" else "+ $newDeaths"
+
+        // Set new numbers
+//        newInfectedTextView.text = formattedNewInfected
+//        newVaccinatedTextView.text = formattedNewVaccinated
+//        newDeathsTextView.text = formattedNewDeaths
+    }
+
+

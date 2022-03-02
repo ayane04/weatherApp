@@ -1,4 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <item name="spinner" type="id" />
+    <item name="tv_latest_update_title" type="id" />
+    <item name="tv_latest_update" type="id" />
 </resources>
