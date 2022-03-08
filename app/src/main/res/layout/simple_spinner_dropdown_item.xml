@@ -7,7 +7,7 @@
     android:rotationX="-2"
 
     android:singleLine="true"
-    android:textColor="#DD8181"
+    android:textColor="#F4F2F2"
     android:textSize="20sp" />
 
     <!--<?xml version="1.0" encoding="utf-8"?>-->

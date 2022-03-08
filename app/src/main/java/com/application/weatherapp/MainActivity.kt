@@ -1,34 +1,36 @@
 package com.application.weatherapp
 
-import android.content.Context
-import android.content.SharedPreferences
-import android.os.AsyncTask
+import android.icu.text.SimpleDateFormat
 import android.os.Bundle
+import android.os.Handler
+import android.util.Log
 import android.view.View
 import android.widget.*
+import androidx.annotation.UiThread
+import androidx.annotation.WorkerThread
 import androidx.appcompat.app.AppCompatActivity
-import org.json.JSONObject
-import java.net.URL
-import java.text.SimpleDateFormat
-import java.util.*
-import android.widget.Spinner
-import android.widget.ArrayAdapter
+import androidx.core.os.HandlerCompat
 import com.application.weatherapp.databinding.ActivityMainBinding
-
+import org.json.JSONObject
+import java.io.BufferedReader
+import java.io.InputStream
+import java.io.InputStreamReader
+import java.net.HttpURLConnection
+import java.net.SocketTimeoutException
+import java.net.URL
+import java.util.*
+import java.util.concurrent.Executors
 
 class MainActivity : AppCompatActivity() {
 
-    val CITY: String="Tokyo, JP"
-//            Array<String> = arrayOf("Tokyo,JP", "California, US", "London, UK")
-    val API: String = "06c921750b9a82d8f5d1294e1586276f"
+    companion object {
+        private const val DEBUG_TAG = "AsyncSample"
+        private const val WEATHERINFO_URL = "https://api.openweathermap.org/data/2.5/weather?lang=en"
+        private const val APP_ID = "06c921750b9a82d8f5d1294e1586276f"
+        private lateinit var binding: ActivityMainBinding
+        private var citySelected = "Tokyo, JP"
 
-//    private lateinit var latestUpdateTitleTextView: TextView
-//    private lateinit var latestUpdateTextView: TextView
-    private lateinit var binding: ActivityMainBinding
-
-//    private var codeSelected = "Tokyo, JP"
-
-    private var citySelected = "Tokyo, JP"
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -37,143 +39,162 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-//        val sharedPreferences = getSharedPreferences("weather app", Context.MODE_PRIVATE)
-
         val adapter : ArrayAdapter<*> = ArrayAdapter.createFromResource(this, R.array.cities, R.layout.simple_spinner_item)
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         binding.spinner.adapter = adapter
 
-        binding.spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+//        val lvCityList = findViewById<ListView>(R.id.lvCityList)
+//        val from  = arrayOf("name")
+//        val to = intArrayOf(android.R.id.text1)
+//        val adapter = SimpleAdapter(this@MainActivity, _list, android.R.layout.simple_list_item_1, from, to)
+//        lvCityList.adapter = adapter
+//        lvCityList.onItemClickListener = ListItemClickListener()
 
-
-            override fun onItemSelected(
-                parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-                val spinnerParent = parent as Spinner
-
-                // ここ？
-                val item = spinnerParent.selectedItem as String
-                citySelected = parent?.getItemAtPosition(position).toString()
-                    //???
-//                    States().getStatesMap()[parent?.getItemAtPosition(position)].toString()
-
-//                updateDataAndVisualizations(sharedPreferences, false)
-
-//                binding.textView.text = item
-
-            }
-            override fun onNothingSelected(parent: AdapterView<*>?) {
+    binding.spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+        override fun onItemSelected(parent: AdapterView<*>, view: View, position: Int, id: Long) {
+            val spinnerParent = parent as Spinner
+            val item= spinnerParent.selectedItem as String
+            citySelected = parent?.getItemAtPosition(position).toString()
+            citySelected?.let {
+                val urlFull = "$WEATHERINFO_URL&q=$citySelected&appid=$APP_ID"
+                receiveWeatherInfo(urlFull)
             }
         }
+        override fun onNothingSelected(p0: AdapterView<*>?) {
+        }
 
-        weatherTask().execute()
-
+    @UiThread
+    private fun receiveWeatherInfo(urlFull: String) {
+        val handler = HandlerCompat.createAsync(mainLooper)
+        val backgroundReceiver = WeatherInfoBackgroundReceiver(handler, urlFull)
+        val executeService = Executors.newSingleThreadExecutor()
+        executeService.submit(backgroundReceiver)
     }
 
-    inner class weatherTask() : AsyncTask<String, Void, String>() {
-        override fun onPreExecute() {
-            super.onPreExecute()
-            /* Showing the ProgressBar, Making the main design GONE */
-            findViewById<ProgressBar>(R.id.loader).visibility = View.VISIBLE
-            findViewById<RelativeLayout>(R.id.mainContainer).visibility = View.GONE
-            findViewById<TextView>(R.id.errorText).visibility = View.GONE
+    private inner class WeatherInfoBackgroundReceiver(handler: Handler, url: String): Runnable {
+        private val _handler = handler
+        private val _url = url
+
+        @WorkerThread
+        override fun run() {
+
+            var result = ""
+            val url = URL(_url)
+            val con = url.openConnection() as? HttpURLConnection
+
+            con?.let {
+                try {
+                    it.connectTimeout = 1000
+                    it.readTimeout = 1000
+                    it.requestMethod = "GET"
+                    it.connect()
+                    val stream = it.inputStream
+
+                    result = is2String(stream)
+                    stream.close()
+                }
+                catch(ex: SocketTimeoutException) {
+                    Log.w(DEBUG_TAG, "通信タイムアウト", ex)
+                }
+
+                it.disconnect()
+            }
+            val postExecutor = WeatherInfoPostExecutor(result)
+            _handler.post(postExecutor)
         }
 
-        override fun doInBackground(vararg params: String?): String? {
-            var response:String?
-            try{
-                response = URL("https://api.openweathermap.org/data/2.5/weather?q=$CITY&units=metric&appid=$API").readText(
-                    Charsets.UTF_8
+        private fun is2String(stream: InputStream): String {
+            val sb = StringBuilder()
+            val reader = BufferedReader(InputStreamReader(stream, "UTF-8"))
+            var line = reader.readLine()
+            while(line != null) {
+                sb.append(line)
+                line = reader.readLine()
+            }
+            reader.close()
+            return sb.toString()
+        }
+    }
+
+    private inner class WeatherInfoPostExecutor(result: String): Runnable {
+        private val _result = result
+
+        @UiThread
+        override fun run() {
+
+            val JSONObject = JSONObject(_result)
+//                val wind = jsonObj.getJSONObject("wind")
+//                val weather = jsonObj.getJSONArray("weather").getJSONObject(0)
+
+            val rootJSON = JSONObject(_result)
+            val main = JSONObject.getJSONObject("main")
+            val sys = JSONObject.getJSONObject("sys")
+            val wind = JSONObject.getJSONObject("wind")
+            val cityName = rootJSON.getString("name")
+            val coordJSON = rootJSON.getJSONObject("coord")
+            val latitude = coordJSON.getString("lat")
+            val longitude = coordJSON.getString("lon")
+            val weatherJSONArray = rootJSON.getJSONArray("weather")
+            val weatherJSON = weatherJSONArray.getJSONObject(0)
+            val weather = weatherJSON.getString("description")
+            val telop = "${cityName}"
+
+            val mainObj: JSONObject = JSONObject.getJSONObject("main")
+            val temp = "" + (mainObj.getDouble("temp") - 273.15f).toInt() + "℃"
+            val tempMax = "Min Temp: " + (mainObj.getDouble("temp_min") - 273.15f).toInt() + "℃"
+            val tempMin = "Max Temp: " + (mainObj.getDouble("temp_max") - 273.15f).toInt() + "℃"
+            val pressure = main.getString("pressure")
+            val humidity = main.getString("humidity")
+            val sunrise: Long = sys.getLong("sunrise")
+            val sunset: Long = sys.getLong("sunset")
+            val windSpeed = wind.getString("speed")
+
+
+            val updatedAt: Long = JSONObject.getLong("dt")
+            val updatedAtText =
+                "Updated at: " + SimpleDateFormat("dd/MM/yyyy hh:mm a", Locale.ENGLISH).format(
+                    Date(updatedAt * 1000)
                 )
-            }catch (e: Exception){
-                response = null
-            }
-            return response
+
+            val desc = "${weather} "
+            val location = "Your location: ${latitude},${longitude}"
+//            val tvWeatherTelop = findViewById<Spinner>(R.id.tvWeatherTelop)
+            val tvWeatherDesc = findViewById<TextView>(R.id.tvWeatherDesc)
+            val tvLocation = findViewById<TextView>(R.id.tvLocation)
+
+            findViewById<TextView>(R.id.temp).text = temp.toString()
+            findViewById<TextView>(R.id.temp_min).text = tempMin.toString()
+            findViewById<TextView>(R.id.temp_max).text = tempMax.toString()
+            findViewById<TextView>(R.id.updated_at).text = updatedAtText
+            findViewById<TextView>(R.id.sunrise).text =
+                SimpleDateFormat("hh:mm a", Locale.ENGLISH).format(Date(sunrise * 1000))
+            findViewById<TextView>(R.id.sunset).text =
+                SimpleDateFormat("hh:mm a", Locale.ENGLISH).format(Date(sunset * 1000))
+            findViewById<TextView>(R.id.wind).text = windSpeed
+            findViewById<TextView>(R.id.pressure).text = pressure
+            findViewById<TextView>(R.id.humidity).text = humidity
+
+//            tvWeatherTelop.textDirection = telop
+            binding.textView.text=telop
+            tvWeatherDesc.text = desc
+            tvLocation.text = location
+
         }
-
-        override fun onPostExecute(result: String?) {
-            super.onPostExecute(result)
-            try {
-                /* Extracting JSON returns from the API */
-                val jsonObj = JSONObject(result)
-                val main = jsonObj.getJSONObject("main")
-                val sys = jsonObj.getJSONObject("sys")
-                val wind = jsonObj.getJSONObject("wind")
-                val weather = jsonObj.getJSONArray("weather").getJSONObject(0)
-
-                val updatedAt:Long = jsonObj.getLong("dt")
-                val updatedAtText = "Updated at: "+ SimpleDateFormat("dd/MM/yyyy hh:mm a", Locale.ENGLISH).format(Date(updatedAt*1000))
-                val temp = main.getString("temp")+"°C"
-                val tempMin = "Min Temp: " + main.getString("temp_min")+"°C"
-                val tempMax = "Max Temp: " + main.getString("temp_max")+"°C"
-                val pressure = main.getString("pressure")
-                val humidity = main.getString("humidity")
-
-                val sunrise:Long = sys.getLong("sunrise")
-                val sunset:Long = sys.getLong("sunset")
-                val windSpeed = wind.getString("speed")
-                val weatherDescription = weather.getString("description")
-
-                val address = jsonObj.getString("name")+", "+sys.getString("country")
-
-                /* Populating extracted data into our views */
-                findViewById<TextView>(R.id.textView).text = address
-                findViewById<TextView>(R.id.updated_at).text =  updatedAtText
-                findViewById<TextView>(R.id.status).text = weatherDescription.capitalize()
-                findViewById<TextView>(R.id.temp).text = temp
-                findViewById<TextView>(R.id.temp_min).text = tempMin
-                findViewById<TextView>(R.id.temp_max).text = tempMax
-                findViewById<TextView>(R.id.sunrise).text = SimpleDateFormat("hh:mm a", Locale.ENGLISH).format(Date(sunrise*1000))
-                findViewById<TextView>(R.id.sunset).text = SimpleDateFormat("hh:mm a", Locale.ENGLISH).format(Date(sunset*1000))
-                findViewById<TextView>(R.id.wind).text = windSpeed
-                findViewById<TextView>(R.id.pressure).text = pressure
-                findViewById<TextView>(R.id.humidity).text = humidity
-//                latestUpdateTitleTextView = findViewById(R.id.tv_latest_update_title)
-//                latestUpdateTextView = findViewById(R.id.tv_latest_update)
-
-                /* Views populated, Hiding the loader, Showing the main design */
-                findViewById<ProgressBar>(R.id.loader).visibility = View.GONE
-                findViewById<RelativeLayout>(R.id.mainContainer).visibility = View.VISIBLE
-
-            } catch (e: Exception) {
-                findViewById<ProgressBar>(R.id.loader).visibility = View.GONE
-                findViewById<TextView>(R.id.errorText).visibility = View.VISIBLE
-            }
-        }
+    }
+    }
 
     }
-//    private fun updateDataAndVisualizations(sharedPreferences: SharedPreferences, calledFromCardView: Boolean) {
-//        setCardText(sharedPreferences)
+//    private inner class ListItemClickListener: AdapterView.OnItemClickListener {
+//        override fun onItemClick(parent: AdapterView<*>, view: View, position: Int, id: Long) {
+//            val item = _list.get(position)
+//            val q = item.get("q")
+//            q?.let {
+//                val urlFull = "$WEATHERINFO_URL&q=$q&appid=$APP_ID"
+//                receiveWeatherInfo(urlFull)
+//            }
+//        }
 //    }
+}
 
-//    private fun setCardText(sharedPreferences: SharedPreferences) {
-//        // Set Cards subtitle text
-//        val latestUpdateTileText = "$codeSelected"
-//        latestUpdateTitleTextView.text = latestUpdateTileText
-//
-//        // Format selected state from "New York" to "NEWYORK" or "All States" to "US"
-//        val CITY = if (citySelected == "All States") "US" else citySelected.uppercase(Locale.ROOT)
-//            .replace(" ", "")
-//
-//        // Set last updated text
-//        latestUpdateTextView.text = sharedPreferences.getString("${CITY}_UPDATED", "Unknown")
-
-        // Set total numbers
-//        .text = sharedPreferences.getString("${CITY}_INFECTED", "Unknown")
-
-        // Get new numbers
-//        val newInfected = sharedPreferences.getString("${CITY}_NEW_INFECTED", "0")
-//        val newVaccinated = sharedPreferences.getString("${state}_NEW_VACCINATED", "0")
-//        val newDeaths = sharedPreferences.getString("${state}_NEW_DEATHS", "0")
-
-        // Format new numbers
-//        val formattedNewInfected = if (newInfected!!.replace(",", "").toInt() <= 0) "No Changes" else "+ $newInfected"
-//        val formattedNewVaccinated = if (newVaccinated!!.replace(",", "").toInt() <= 0) "No Changes" else "+ $newVaccinated"
-//        val formattedNewDeaths = if (newDeaths!!.replace(",", "").toInt() <= 0) "No Changes" else "+ $newDeaths"
-
-        // Set new numbers
-//        newInfectedTextView.text = formattedNewInfected
-//        newVaccinatedTextView.text = formattedNewVaccinated
-//        newDeathsTextView.text = formattedNewDeaths
-    }
 
 

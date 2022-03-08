@@ -3,10 +3,13 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="app/src/main/res/drawable-v24/ic_launcher_foreground.xml" value="0.1265" />
         <entry key="app/src/main/res/drawable/gradient_bg.xml" value="0.155" />
+        <entry key="app/src/main/res/drawable/ic_check.xml" value="0.1265" />
         <entry key="app/src/main/res/drawable/ic_dropdown.xml" value="0.1" />
+        <entry key="app/src/main/res/drawable/ic_launcher_background.xml" value="0.1" />
         <entry key="app/src/main/res/font/bold.xml" value="0.11203703703703703" />
-        <entry key="app/src/main/res/layout/activity_main.xml" value="0.3539325842696629" />
+        <entry key="app/src/main/res/layout/activity_main.xml" value="0.25" />
         <entry key="app/src/main/res/layout/simple_spinner_dropdown_item.xml" value="0.14361702127659576" />
         <entry key="app/src/main/res/layout/simple_spinner_item.xml" value="0.14361702127659576" />
         <entry key="app/src/main/res/layout/spinner_states_dropdown_item.xml" value="0.1" />

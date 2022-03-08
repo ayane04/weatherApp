@@ -3,4 +3,6 @@
     <item name="spinner" type="id" />
     <item name="tv_latest_update_title" type="id" />
     <item name="tv_latest_update" type="id" />
+    <item name="lvCityList" type="id" />
+    <item name="tvLocation" type="id" />
 </resources>
