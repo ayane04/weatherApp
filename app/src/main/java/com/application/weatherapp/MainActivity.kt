@@ -21,6 +21,11 @@ import java.net.URL
 import java.util.*
 import java.util.concurrent.Executors
 
+//予報追加
+//現在の位置情報取得
+//detailのアイコン
+//雨が降りそうになったら通知
+//media playerの効果音
 class MainActivity : AppCompatActivity() {
 
     companion object {

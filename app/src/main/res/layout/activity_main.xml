@@ -21,20 +21,20 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-<!--            <Spinner-->
-<!--                android:id="@+id/spinner"-->
-<!--                android:layout_width="507dp"-->
-<!--                android:layout_height="50dp"-->
-<!--                android:backgroundTint="#CA7272"-->
-<!--                android:backgroundTintMode="src_in"-->
-<!--                android:foregroundTint="#F3D3D3"-->
-<!--                android:foregroundTintMode="src_in"-->
-<!--                android:paddingLeft="110sp"-->
-<!--                app:layout_constraintBottom_toBottomOf="parent"-->
-<!--                app:layout_constraintLeft_toLeftOf="parent"-->
-<!--                app:layout_constraintRight_toRightOf="parent"-->
-<!--                app:layout_constraintTop_toTopOf="parent"-->
-<!--                app:layout_constraintVertical_bias="5" />-->
+            <!--            <Spinner-->
+            <!--                android:id="@+id/spinner"-->
+            <!--                android:layout_width="507dp"-->
+            <!--                android:layout_height="50dp"-->
+            <!--                android:backgroundTint="#CA7272"-->
+            <!--                android:backgroundTintMode="src_in"-->
+            <!--                android:foregroundTint="#F3D3D3"-->
+            <!--                android:foregroundTintMode="src_in"-->
+            <!--                android:paddingLeft="110sp"-->
+            <!--                app:layout_constraintBottom_toBottomOf="parent"-->
+            <!--                app:layout_constraintLeft_toLeftOf="parent"-->
+            <!--                app:layout_constraintRight_toRightOf="parent"-->
+            <!--                app:layout_constraintTop_toTopOf="parent"-->
+            <!--                app:layout_constraintVertical_bias="5" />-->
 
             <TextView
                 android:id="@+id/textView"
@@ -42,7 +42,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:fontFamily="sans-serif-thin"
-                android:text="Select city"
+                android:text=""
                 android:textSize="0dp" />
 
             <Spinner
@@ -51,48 +51,19 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:entries="@array/cities"
-                android:paddingLeft="50sp"
                 android:fontFamily="sans-serif-thin"
-                android:textSize="90dp" />
+                android:paddingLeft="50sp"
+                android:textSize="90sp" />
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center"
                 android:layout_marginBottom="10dp"
                 android:gravity="center"
-                android:layout_gravity="center"
                 android:text="@string/tv_winfo_title"
                 android:textSize="25sp" />
 
-            <TextView
-                android:id="@+id/updated_at"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:fontFamily="sans-serif-thin"
-                android:padding="70dp"
-                android:text="4 April 2022, 20:08 PM"
-                android:textSize="16dp" />
-
-
-        </LinearLayout>
-
-
-        <LinearLayout
-            android:id="@+id/overviewContainer"
-            android:layout_width="match_parent"
-            android:layout_height="424dp"
-            android:layout_gravity="center"
-            android:orientation="vertical">
-
-            <TextView
-                android:id="@+id/tvWeatherDesc"
-                android:layout_width="249dp"
-                android:layout_height="69dp"
-                android:layout_gravity="center"
-                android:fontFamily="sans-serif-thin"
-                android:text="Clear Sky"
-                android:textSize="30dp" />
 
             <TextView
                 android:id="@+id/tvLocation"
@@ -100,14 +71,42 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:fontFamily="sans-serif-thin"
-                android:padding="70dp"
-                android:text=""
+                android:padding="7dp"
+                android:text="Your location: "
                 android:textSize="16dp" />
 
             <TextView
+                android:id="@+id/updated_at"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:fontFamily="sans-serif-thin"
+                android:padding="7dp"
+                android:text="Updated at:"
+                android:textSize="16dp" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginBottom="10dp"
+                android:gravity="center"
+                android:text="@string/tv_winfo_title"
+                android:textSize="25sp" />
+
+            <TextView
+                android:id="@+id/tvWeatherDesc"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:fontFamily="sans-serif-thin"
+                android:text="Clear sky"
+                android:textSize="30dp" />
+
+            <TextView
                 android:id="@+id/temp"
-                android:layout_width="214dp"
-                android:layout_height="155dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:fontFamily="sans-serif-thin"
                 android:text="18°C"
@@ -122,25 +121,42 @@
                 android:orientation="horizontal">
 
                 <TextView
-                    android:id="@+id/temp_min"
+                    android:id="@+id/temp_max"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Min Temp: 05:05 AM" />
+                    android:text="Max Temp: 23°C" />
 
                 <Space
                     android:layout_width="50dp"
                     android:layout_height="wrap_content" />
 
                 <TextView
-                    android:id="@+id/temp_max"
+                    android:id="@+id/temp_min"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Max Temp: 05:05 PM" />
+                    android:text="Min Temp: 7°C" />
+
             </LinearLayout>
+        </LinearLayout>
+
+<!--        <LinearLayout-->
+<!--            android:id="@+id/overviewContainer"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="424dp"-->
+<!--            android:layout_gravity="center"-->
+<!--            android:orientation="vertical">-->
+<!--        </LinearLayout>-->
+
+        <LinearLayout
+            android:id="@+id/detailsContainer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:orientation="vertical">
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="82dp"
+                android:layout_height="33dp"
                 android:orientation="vertical">
 
                 <!--        <ListView-->
@@ -172,15 +188,6 @@
                 <!--                android:textSize="15sp" />-->
                 <!--        </LinearLayout>-->
             </LinearLayout>
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/detailsContainer"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:orientation="vertical">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -415,6 +422,7 @@
                 </LinearLayout>
             </LinearLayout>
         </LinearLayout>
+
     </RelativeLayout>
 
     <ProgressBar
