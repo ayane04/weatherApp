@@ -51,7 +51,8 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:entries="@array/cities"
-                android:paddingLeft="60sp"
+                android:paddingLeft="50sp"
+                android:fontFamily="sans-serif-thin"
                 android:textSize="90dp" />
 
             <TextView
@@ -67,8 +68,9 @@
                 android:id="@+id/updated_at"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:padding="70dp"
                 android:layout_gravity="center"
+                android:fontFamily="sans-serif-thin"
+                android:padding="70dp"
                 android:text="4 April 2022, 20:08 PM"
                 android:textSize="16dp" />
 
@@ -79,35 +81,36 @@
         <LinearLayout
             android:id="@+id/overviewContainer"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:orientation="vertical"
-            android:layout_gravity="center">
+            android:layout_height="424dp"
+            android:layout_gravity="center"
+            android:orientation="vertical">
 
             <TextView
                 android:id="@+id/tvWeatherDesc"
-                android:layout_width="118dp"
-                android:layout_height="38dp"
+                android:layout_width="249dp"
+                android:layout_height="69dp"
                 android:layout_gravity="center"
+                android:fontFamily="sans-serif-thin"
                 android:text="Clear Sky"
-                android:textSize="25dp" />
+                android:textSize="30dp" />
 
             <TextView
                 android:id="@+id/tvLocation"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:padding="70dp"
                 android:layout_gravity="center"
+                android:fontFamily="sans-serif-thin"
+                android:padding="70dp"
                 android:text=""
                 android:textSize="16dp" />
 
             <TextView
                 android:id="@+id/temp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="214dp"
+                android:layout_height="155dp"
                 android:layout_gravity="center"
                 android:fontFamily="sans-serif-thin"
-                android:text="0°C"
+                android:text="18°C"
                 android:textAllCaps="false"
                 android:textSize="90sp"
                 android:typeface="normal" />
@@ -135,8 +138,42 @@
                     android:text="Max Temp: 05:05 PM" />
             </LinearLayout>
 
-        </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="82dp"
+                android:orientation="vertical">
 
+                <!--        <ListView-->
+                <!--            android:id="@+id/lvCityList"-->
+                <!--            android:layout_width="match_parent"-->
+                <!--            android:layout_height="20dp"-->
+                <!--            android:layout_weight="0.1"-->
+                <!--            android:textSize="10dp" />-->
+
+                <!--        <LinearLayout-->
+                <!--            android:layout_width="match_parent"-->
+                <!--            android:layout_height="0dp"-->
+                <!--            android:layout_marginTop="10dp"-->
+                <!--            android:layout_weight="0.3"-->
+                <!--            android:orientation="vertical">-->
+
+
+                <!--            <TextView-->
+                <!--                android:id="@+id/tvWeatherTelop"-->
+                <!--                android:layout_width="match_parent"-->
+                <!--                android:layout_height="wrap_content"-->
+                <!--                android:layout_marginBottom="8dp"-->
+                <!--                android:textSize="20sp" />-->
+
+                <!--            <TextView-->
+                <!--                android:id="@+id/tvWeatherDesc"-->
+                <!--                android:layout_width="match_parent"-->
+                <!--                android:layout_height="wrap_content"-->
+                <!--                android:textSize="15sp" />-->
+                <!--        </LinearLayout>-->
+            </LinearLayout>
+
+        </LinearLayout>
 
         <LinearLayout
             android:id="@+id/detailsContainer"
@@ -415,41 +452,6 @@
         android:drawablePadding="5dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tv_latest_update_title" />
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
-
-<!--        <ListView-->
-<!--            android:id="@+id/lvCityList"-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="20dp"-->
-<!--            android:layout_weight="0.1"-->
-<!--            android:textSize="10dp" />-->
-
-<!--        <LinearLayout-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="0dp"-->
-<!--            android:layout_marginTop="10dp"-->
-<!--            android:layout_weight="0.3"-->
-<!--            android:orientation="vertical">-->
-
-
-            <!--            <TextView-->
-            <!--                android:id="@+id/tvWeatherTelop"-->
-            <!--                android:layout_width="match_parent"-->
-            <!--                android:layout_height="wrap_content"-->
-            <!--                android:layout_marginBottom="8dp"-->
-            <!--                android:textSize="20sp" />-->
-
-            <!--            <TextView-->
-            <!--                android:id="@+id/tvWeatherDesc"-->
-            <!--                android:layout_width="match_parent"-->
-            <!--                android:layout_height="wrap_content"-->
-            <!--                android:textSize="15sp" />-->
-<!--        </LinearLayout>-->
-    </LinearLayout>
 
 </RelativeLayout>
 
