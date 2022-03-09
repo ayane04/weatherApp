@@ -28,7 +28,7 @@ class MainActivity : AppCompatActivity() {
         private const val WEATHERINFO_URL = "https://api.openweathermap.org/data/2.5/weather?lang=en"
         private const val APP_ID = "06c921750b9a82d8f5d1294e1586276f"
         private lateinit var binding: ActivityMainBinding
-        private var citySelected = "Tokyo, JP"
+        private var citySelected = "Select City"
 
     }
 

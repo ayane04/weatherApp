@@ -7,8 +7,8 @@
     android:rotationX="-2"
 
     android:singleLine="true"
-    android:textColor="#F4F2F2"
-    android:textSize="20sp" />
+    android:textColor="#050505"
+    android:textSize="40sp" />
 
     <!--<?xml version="1.0" encoding="utf-8"?>-->
     <!--    <CheckedTextView xmlns:android="http://schemas.android.com/apk/res/android"-->

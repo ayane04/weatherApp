@@ -38,12 +38,21 @@
 
             <TextView
                 android:id="@+id/textView"
-                android:layout_width="238dp"
-                android:layout_height="100sp"
+                android:layout_width="71dp"
+                android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:fontFamily="sans-serif-thin"
                 android:text="Select city"
-                android:textSize="50dp" />
+                android:textSize="0dp" />
+
+            <Spinner
+                android:id="@+id/spinner"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:entries="@array/cities"
+                android:paddingLeft="60sp"
+                android:textSize="90dp" />
 
             <TextView
                 android:layout_width="match_parent"
@@ -91,13 +100,6 @@
                 android:layout_gravity="center"
                 android:text=""
                 android:textSize="16dp" />
-
-            <Spinner
-                android:id="@+id/spinner"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:entries="@array/cities" />
 
             <TextView
                 android:id="@+id/temp"
@@ -419,19 +421,19 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <ListView
-            android:id="@+id/lvCityList"
-            android:layout_width="match_parent"
-            android:layout_height="20dp"
-            android:layout_weight="0.1"
-            android:textSize="10dp" />
+<!--        <ListView-->
+<!--            android:id="@+id/lvCityList"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="20dp"-->
+<!--            android:layout_weight="0.1"-->
+<!--            android:textSize="10dp" />-->
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_marginTop="10dp"
-            android:layout_weight="0.3"
-            android:orientation="vertical">
+<!--        <LinearLayout-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="0dp"-->
+<!--            android:layout_marginTop="10dp"-->
+<!--            android:layout_weight="0.3"-->
+<!--            android:orientation="vertical">-->
 
 
             <!--            <TextView-->
@@ -446,7 +448,7 @@
             <!--                android:layout_width="match_parent"-->
             <!--                android:layout_height="wrap_content"-->
             <!--                android:textSize="15sp" />-->
-        </LinearLayout>
+<!--        </LinearLayout>-->
     </LinearLayout>
 
 </RelativeLayout>
